@@ -1,0 +1,38 @@
+{
+  "name": "UX Recorder",
+  "short_name": "UXRecorder",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "A chrome extension to integrate harvest time tracking with GitHub and GitHub specific tools (like Huboard).",
+  "icons": {
+    "128": "img/logo-128.png",
+    "48": "img/logo-48.png"
+  },
+  "background": {
+    "scripts": [
+      "lib/background.js"
+    ],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "data/index.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "permissions": [
+		"<all_urls>",
+		"tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "http://*/",
+    "https://*/"
+  ]
+}

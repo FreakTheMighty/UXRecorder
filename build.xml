@@ -1,0 +1,12 @@
+<project name="UXRecorder" basedir="." default="build">
+    <target name="prepare">
+        <delete dir="build"/>
+        <mkdir dir="build"/>
+    </target>
+    <target name="build" depends="prepare">
+        <zip destfile="build/UXRecorder.zip" basedir="src/" />
+    </target>
+    <target name="test" depends="prepare">
+        <echo message="no test target required for now" />
+    </target>
+</project>

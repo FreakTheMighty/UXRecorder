@@ -2,13 +2,11 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '100MB'}));
 
 app.post('/save',function(req, res){
-  var image = req.body.image;
-  var data = req.body.data;
-	console.log('image', image);
-	console.log('data', data);
+	console.log('body', req.body);
+	res.send('complete');
 });
 
 app.get('/',function(req, res){

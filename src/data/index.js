@@ -1,7 +1,17 @@
-debugger;
 console.log('background');
-chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-  console.log(response.farewell);
+document.addEventListener('click', function(e){
+  chrome.runtime.sendMessage({
+		  command: 'log',
+			event:{
+				eventName: 'click', 
+		    mouseX: e.pageX/window.innerWidth,
+		    mouseY: e.pageY/window.innerHeight,
+		  }
+	});
 });
+
+setInterval(function(){
+	chrome.runtime.sendMessage({command: 'screenGrab'});
+}, 1000);
 
 

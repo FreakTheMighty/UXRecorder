@@ -8,13 +8,12 @@ chrome.runtime.onMessage.addListener(
 				latestImage = image;
 				console.log(request);
 			});
-		} else if (request.command === 'log' ) {
-			console.log(request);
+		} else if (request.command === 'log' && latestImage ) {
 			$.ajax({
 				url: 'http://localhost:3000/save', 
 				data: JSON.stringify({
 				  image: latestImage,
-				  event: request
+				  data: request
 				}),
         type: 'POST',
         contentType : 'application/json',

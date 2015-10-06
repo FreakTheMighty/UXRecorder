@@ -14,4 +14,14 @@ setInterval(function(){
 	chrome.runtime.sendMessage({command: 'screenGrab'});
 }, 1000);
 
+document.onload = function(){
+	chrome.runtime.sendMessage({command: 'screenGrab'});
+};
+
+$(document).ready(function(){
+	chrome.runtime.sendMessage({command: 'screenGrab'});
+});
+
+chrome.runtime.sendMessage({command: 'screenGrab'});
+
 

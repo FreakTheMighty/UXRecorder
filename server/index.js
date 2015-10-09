@@ -23,21 +23,21 @@ function decodeBase64Image(dataString) {
 app.use(bodyParser.json({limit: '100MB'}));
 
 app.post('/save',function(req, res){
-	console.log('body', req.body);
-	var imageBuffer = decodeBase64Image(req.body.image),
-		timestamp = new Date().getTime(),
-		imagePath = path.join(STORAGE_PATH, timestamp+'.jpg'),
-		jsonPath = path.join(STORAGE_PATH, timestamp+'.json');
+  console.log('Logging interaction');
+  var imageBuffer = decodeBase64Image(req.body.image),
+    timestamp = new Date().getTime(),
+    imagePath = path.join(STORAGE_PATH, timestamp+'.jpg'),
+    jsonPath = path.join(STORAGE_PATH, timestamp+'.json');
 
   fs.writeFile( imagePath, imageBuffer.data, function(err) {
     fs.writeFile( jsonPath, JSON.stringify(req.body.data.event, null, 2), function(err) {
-	  	res.send('complete');
-	  });
-	});
+      res.send('complete');
+    });
+  });
 });
 
 app.get('/',function(req, res){
-	res.send('alive');
+  res.send('alive');
 });
 
 var server = app.listen(3000, function () {

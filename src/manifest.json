@@ -11,27 +11,29 @@
   "background": {
     "scripts": [
       "lib/background.js",
-			"lib/jquery.js"
+      "lib/jquery.js",
+        "lib/lodash.js"
     ],
     "persistent": true
   },
   "content_scripts": [
     {
       "js": [
-				"lib/jquery.js",
+        "lib/jquery.js",
+        "lib/lodash.js",
         "data/index.js"
       ],
       "matches": [
         "http://*/*",
         "https://*/*"
       ],
-			"run_at": "document_start"
+      "run_at": "document_start"
     }
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "permissions": [
-		"<all_urls>",
-		"tabs",
+    "<all_urls>",
+    "tabs",
     "storage",
     "webRequest",
     "webRequestBlocking",

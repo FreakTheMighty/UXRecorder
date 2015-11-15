@@ -24,13 +24,16 @@ Reference:
 
 from neon.initializers import GlorotUniform
 from neon.optimizers import GradientDescentMomentum, Schedule
-from neon.layers import Conv, Dropout, Activation, Pooling, GeneralizedCost, SumSquared
+from neon.layers import Conv, Dropout, Activation, Pooling, GeneralizedCost
+from neon.transforms.cost import SumSquared
 from neon.transforms import Rectlin, Softmax, CrossEntropyMulti, Misclassification
 from neon.models import Model
 from neon.data import DataIterator, load_cifar10
 from neon.callbacks.callbacks import Callbacks
 from neon.util.argparser import NeonArgparser
+from neon import NervanaObject
 import glob
+from scipy.misc import imread
 
 # parse the command line arguments
 parser = NeonArgparser(__doc__)
@@ -42,27 +45,34 @@ class ImageReader(NervanaObject):
         self.batch_index = 0
         self.input_paths = glob.glob(input_glob)
         self.target_paths = glob.glob(target_glob)
-        self.ndata = len(inputPaths)
+        self.ndata = len(self.input_paths)
+        print(self.be.bsz)
         assert len(self.input_paths) == len(self.target_paths)
         assert self.ndata > self.be.bsz
         self.nbatches = self.ndata / (self.be.bsz)
-
 
     def reset(self):
         self.batch_index = 0
 
     def __iter__(self):
-        self.batch_index = 0
+        self.batch_index = 0 
         while self.batch_index < self.nbatches:
             start_index = self.be.bsz*self.batch_index;
             input_batch = self.input_paths[start_index:start_index+self.be.bsz]
             target_batch = self.target_paths[start_index:start_index+self.be.bsz]
-
+            
+            input_images = []
+            target_images = []
             # Read paths
-
+            for input_path, target_paths in zip(input_batch, target_batch):
+                input_images.append(imread(input_path))
+                target_images.append(imread(target_path))
+               
+            
             self.batch_index += 1
-
-            yield input_images, output_images
+            
+            yield input_paths, output_images
+            
 
 
 
@@ -71,11 +81,9 @@ class ImageReader(NervanaObject):
 # hyperparameters
 num_epochs = args.epochs
 
-(X_train, y_train), (X_test, y_test), nclass = load_cifar10(path=args.data_dir)
-
 # really 10 classes, pad to nearest power of 2 to match conv output
-train_set = DataIterator(X_train, y_train, nclass=16, lshape=(3, 512, 512))
-valid_set = DataIterator(X_test, y_test, nclass=16, lshape=(3, 512, 512))
+train_set = ImageReader("/data/uxrecorder/train/*.png", "/data/uxrecorder/train/target/*.png")
+valid_set = ImageReader("/data/uxrecorder/valid/*.png", "/data/uxrecorder/valid/target/*.png")
 
 init_uni = GlorotUniform()
 opt_gdm = GradientDescentMomentum(learning_rate=0.5, momentum_coef=0.9, wdecay=.0001,

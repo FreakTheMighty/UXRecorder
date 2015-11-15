@@ -30,10 +30,43 @@ from neon.models import Model
 from neon.data import DataIterator, load_cifar10
 from neon.callbacks.callbacks import Callbacks
 from neon.util.argparser import NeonArgparser
+import glob
 
 # parse the command line arguments
 parser = NeonArgparser(__doc__)
 args = parser.parse_args()
+
+class ImageReader(NervanaObject):
+
+    def __init__(self, input_glob, target_glob):
+        self.batch_index = 0
+        self.input_paths = glob.glob(input_glob)
+        self.target_paths = glob.glob(target_glob)
+        self.ndata = len(inputPaths)
+        assert len(self.input_paths) == len(self.target_paths)
+        assert self.ndata > self.be.bsz
+        self.nbatches = self.ndata / (self.be.bsz)
+
+
+    def reset(self):
+        self.batch_index = 0
+
+    def __iter__(self):
+        self.batch_index = 0
+        while self.batch_index < self.nbatches:
+            start_index = self.be.bsz*self.batch_index;
+            input_batch = self.input_paths[start_index:start_index+self.be.bsz]
+            target_batch = self.target_paths[start_index:start_index+self.be.bsz]
+
+            # Read paths
+
+            self.batch_index += 1
+
+            yield input_images, output_images
+
+
+
+        
 
 # hyperparameters
 num_epochs = args.epochs

@@ -37,6 +37,7 @@
     "storage",
     "webRequest",
     "webRequestBlocking",
+    "activeTab",
     "http://*/",
     "https://*/"
   ]
